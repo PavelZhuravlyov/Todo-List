@@ -1,10 +1,11 @@
-import EventHandler from '../event/event';
+import EventHandler from '../event-handler/event-handler';
 import AddTaskButton from '../add-button/add-button';
+import HtmlSanitizer from '../html-sanitizer/html-sanitizer';
 
 const $addTaskButton = new AddTaskButton({ innerHTML: 'Add task' });
 const defaultInputProps = {
   className: 'input-field',
-  placeholder: 'Введите название'
+  placeholder: 'Enter task name'
 };
 
 class InputTask {
@@ -39,7 +40,7 @@ class InputTask {
   }
 
   addTaskHandler() {
-    const taskName = this.$input.value.trim();
+    const taskName = HtmlSanitizer.encodeHTML(this.$input.value.trim());
 
     if (taskName) {
       EventHandler.addTask(taskName);

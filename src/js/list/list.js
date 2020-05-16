@@ -1,5 +1,6 @@
 import Task from '../task/task';
 import Store from '../store/store';
+import ListEventsHandlers from '../list-events-handler/list-events-handler';
 import events from '../events';
 
 class List {
@@ -7,45 +8,17 @@ class List {
     this.$root = $parentNode;
     this.tasks = tasks;
 
-    this.initEvents();
+    this.initEventsHandlers();
   }
 
-  initEvents() {
-    document.addEventListener(events.removeTask, (event) => {
-      const { detail } = event;
-      const { taskId } = detail;
-
-      this.removeTask(taskId);
-    });
-
-    document.addEventListener(events.addTask, (event) => {
-      const { detail } = event;
-      const { taskName } = detail;
-
-      this.addTask({ name: taskName });
-    });
-
-    document.addEventListener(events.editTask, (event) => {
-      const { detail:newTaskData } = event;
-      this.editTask(newTaskData);
-    });
-
-    document.addEventListener(events.completeTask, () => {
-      this.renderList();
-    });
-
-    document.addEventListener(events.changeTaskPriority, (event) => {
-      const { detail } = event;
-      const { id, priorityCount } = detail;
-
-      this.changeTaskPriority(id, priorityCount);
-    });
+  initEventsHandlers() {
+    new ListEventsHandlers(this).initHandlers();
   }
 
   addTask(data) {
     const { name, ...restData } = data;
 
-    this.tasks.unshift(new Task(name));
+    this.tasks.unshift(new Task(name, restData));
     this.renderList();
   }
 
@@ -56,8 +29,13 @@ class List {
 
   editTask(newTaskData) {
     const { id:taskId, name } = newTaskData;
-    const editedTask = this.tasks.find((task) => task.id === taskId);
-    const editedTaskIndex = this.tasks.findIndex((task) => task.id === taskId);
+    let editedTaskIndex;
+    const editedTask = this.tasks.find((task, index) => {
+      if (task.id === taskId) {
+        editedTaskIndex = index;
+        return true;
+      }
+    });
 
     editedTask.name = name;
 
@@ -98,11 +76,18 @@ class List {
     this.saveTasks();
     this.$root.innerHTML = '';
 
-    this.tasks.forEach((task, index) => {
-      this.$root.appendChild(task.render({
-        number: index + 1
-      }));
-    });
+    if (this.tasks.length) {
+      this.tasks.forEach((task, index) => {
+        this.$root.appendChild(task.render({
+          number: index + 1,
+          isLast: index === this.tasks.length - 1
+        }));
+      });
+    } else {
+      this.$root.innerHTML = `
+        <div class="empty-message">Your Todo List is empty</div>
+      `;
+    }
 
     return this.$root;
   }

@@ -1,20 +1,18 @@
-import { nanoid } from 'nanoid';
-
 import DeleteButton from '../delete-button/delete-button';
 import EditTaskButton from '../edit-button/edit-button';
 import EditTaskForm from '../edit-task-form/edit-task-form';
 import ArrowButton from '../arrow-button/arrow-button';
 import CompleteTaskButton from '../complete-button/complete-button';
-import EventHandler from '../event/event';
-import events from '../events';
+import EventHandler from '../event-handler/event-handler';
 import Button from '../button/button';
+import events from '../events';
 
 class Task {
   constructor(name, data={}) {
     this.name = name;
     this.data = data;
-    this.id = nanoid();
-    this.isCompleted = this.data.isCompleted || false;
+    this.id = this.data.id || Date.now();
+    this.isCompleted = !!this.data.isCompleted;
     this.$task = document.createElement('div');
 
     this.initComponents();
@@ -27,10 +25,10 @@ class Task {
   updateTaskProps({ number }) {
     this.$task.innerHTML = `
       <div class="task-name-holder">
-        <div class="task-index">${ number })</div>
         <div class="task-name">${ this.name }</div>
       </div>
     `;
+
     this.$task.className = this.taskClasses;
   }
 
@@ -74,6 +72,11 @@ class Task {
 
   removeTaskHandler() {
     EventHandler.removeTask(this.id);
+    this.$deleteButton.unBindClick();
+    this.$editButton.unBindClick();
+    this.$completeButton.unBindClick();
+    this.$priorityUpButton.unBindClick();
+    this.$priorityDownButton.unBindClick();
   }
 
   editTaskInit() {
@@ -87,23 +90,49 @@ class Task {
     EventHandler.completeTask();
   }
 
+  renderPriorityTool(data={}) {
+    const { number, isLast } = data;
+    const isFirst = number === 1;
+    const $arrowContainer = document.createElement('div');
+
+    $arrowContainer.className = 'arrow-buttons';
+
+    if (isFirst && isLast) {
+      return '';
+    }
+
+    if (isLast) {
+      $arrowContainer.append(
+        this.$priorityUpButton.button,
+      );
+    } else if (isFirst) {
+      $arrowContainer.append(
+        this.$priorityDownButton.button,
+      );
+    } else {
+      $arrowContainer.append(
+        this.$priorityUpButton.button,
+        this.$priorityDownButton.button,
+      );
+    }
+
+    return $arrowContainer;
+  }
+
   render(data={}) {
     const $itemContainer = document.createElement('div');
     const $toolsHolder = document.createElement('div');
-    const $arrowContainer = document.createElement('div');
+    const _this = this;
     
     this.updateTaskProps(data);
     $itemContainer.className = 'task';
     $toolsHolder.className = 'task-tools';
-    $arrowContainer.className = 'arrow-buttons';
 
-    $arrowContainer.append(
-      this.$priorityUpButton.button,
-      this.$priorityDownButton.button,
+    $itemContainer.append(
+      this.renderPriorityTool(data)
     );
-    
+  
     $toolsHolder.append(
-      $arrowContainer,
       this.$completeButton.button,
       this.$editButton.button,
       this.$deleteButton.button,

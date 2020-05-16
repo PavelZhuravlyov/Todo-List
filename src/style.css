@@ -6,6 +6,7 @@ body {
   background-color: #fff;
   background: linear-gradient(315deg, #fff 0%, #d7e1ec 100%) no-repeat;
   color: #5d4a4a;
+  min-width: 320px;
 } 
 
 #root {
@@ -42,11 +43,6 @@ body {
 
 .task:last-child {
   border: 0;
-}
-
-.task-info {
-  display: flex;
-  font-size: 18px;
 }
 
 .task-info.task-is-completed > .task-name-holder {
@@ -90,22 +86,60 @@ body {
 }
 
 .arrow-buttons {
-  position: relative;
-  width: 20px;
-  height: 20px;
-  margin: 0 15px;
+  margin: 0 15px 0 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.arrow-task-up,
-.arrow-task-down {
-  position: absolute;
-  left: 0;
+.edit-task-form-button {
+  margin: 0 15px 0 0;
 }
 
-.arrow-task-up {
-  top: -4px;
+.empty-message {
+  font-size: 18px;
 }
 
-.arrow-task-down {
-  top: 9px;
+.task-name {
+  font-size: 18px;
+}
+
+@media screen and (max-width: 641px) {
+  .task {
+    flex-wrap: wrap;
+  }
+
+  .task-list {
+    padding: 30px 20px;
+  }
+
+  .task-tools {
+    order: -1;
+    margin: 0 0 0 auto;
+  }
+
+  .arrow-buttons {
+    order: -2;
+    margin: 0;
+  }
+
+  .button-task-complete {
+    opacity: 1;
+  }
+
+  .task-info {
+    margin: 20px 0 0;
+    width: 100%;
+  }
+
+  .task-name {
+    font-size: 20px;
+  }
+
+  .button-task-complete {
+    margin: 0 15px 0 auto;
+  }
+
+  .delete-task-button {
+    margin: 0 0 0 20px;
+  }
 }

@@ -1,5 +1,6 @@
-import EventHandler from '../event/event';
+import EventHandler from '../event-handler/event-handler';
 import Button from '../button/button';
+import HtmlSanitizer from '../html-sanitizer/html-sanitizer';
 
 const ESC_CODE = 27;
 
@@ -8,15 +9,29 @@ class EditTaskForm {
     this.taskData = taskData;
     this.$form = document.createElement('form');
 
+    this.initTools();
+    this.initHandlers();
+  }
+
+  initTools() {
     this.$cancelEditButton = new Button({
       innerHTML: 'Cancel',
-      className: 'btn-small red'
+      className: 'btn-small red edit-task-form-button'
     });
 
-    this.$cancelEditButton.handleClick(this.cancelEdit.bind(this));
-    this.$form.addEventListener('submit', this.handleEditTask.bind(this));
+    this.$submitEditButton = new Button({
+      innerHTML: 'Edit task',
+      className: 'btn-small edit-task-form-button',
+      type: 'submit'
+    });
+  }
 
-    this.cancelEditCopy = this.cancelEdit.bind(this);
+  initHandlers() {
+    const editTaskHandler = this.handleEditTask.bind(this);
+
+    this.$submitEditButton.handleClick(editTaskHandler)
+    this.$cancelEditButton.handleClick(this.cancelEdit.bind(this));
+    this.$form.addEventListener('submit', editTaskHandler);
 
     this.handleKeyDown = (event) => {
       if (event.keyCode === ESC_CODE) {
@@ -46,7 +61,9 @@ class EditTaskForm {
     const inputs = this.$form.getElementsByTagName('input');
 
     for (const $input of inputs) {
-      newTaskData[$input.name] = $input.value;
+      if ($input.value && $input.value.trim()) {
+        newTaskData[$input.name] = HtmlSanitizer.encodeHTML($input.value.trim());
+      }
     }
 
     return newTaskData;
@@ -54,25 +71,27 @@ class EditTaskForm {
 
   handleEditTask(event) {
     event.preventDefault();
-
-    EventHandler.editTask({
+    const taskData = {
       ...this.taskData,
       ...this.formData
-    });
+    };
 
-    this.updateTaskInfo({
-      ...this.taskData,
-      ...this.formData
-    });
+    EventHandler.editTask(taskData);
+    this.updateTaskInfo(taskData);
   }
 
   initForm() {
-    this.$form.innerHTML = `
-      <input autofocus type="text" name="name" value="${ this.taskData.name }" />
-      <button type="submit" class="btn-small">Edit task</button>
-    `;
+    const $input = document.createElement('input');
+    $input.value = this.taskData.name;
+    $input.name = 'name';
 
-    this.$form.appendChild(this.$cancelEditButton.button);
+    this.$form.innerHTML = '';
+
+    this.$form.append(
+      $input,
+      this.$submitEditButton.button,
+      this.$cancelEditButton.button
+    );
   }
 
   render() {

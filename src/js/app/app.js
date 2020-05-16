@@ -3,6 +3,7 @@ import List from '../list/list';
 import Task from '../task/task';
 import InputTask from '../input//input';
 import Store from '../store/store';
+import HtmlSanitizer from '../html-sanitizer/html-sanitizer';
 
 class App {
   constructor(rootBlockId) {
@@ -14,8 +15,7 @@ class App {
     $itemContainer.className = 'input-container';
     $list.className = 'task-list';
 
-    this.$root.appendChild($list);
-    this.$root.appendChild($itemContainer);
+    this.$root.append($list, $itemContainer);
 
     this.todo = new List(this.initTasks(), $list);
     this.$input = new InputTask($itemContainer);
@@ -25,12 +25,12 @@ class App {
     const initialTasksData = Store.get('tasks') || [];
 
     return initialTasksData.map((taskData) => {
-      const { name, data } = taskData;
-      return new Task(name);
+      const { name, id, data } = taskData;
+      return new Task(HtmlSanitizer.encodeHTML(name), { id, ...data });
     });
   }
 
-  init() {    
+  init() {
     this.render();
   }
 

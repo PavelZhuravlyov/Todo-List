@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserJSPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -19,6 +21,10 @@ module.exports = {
     contentBase: path.join(__dirname, 'src')
   },
 
+  optimization: {
+    minimizer: [new TerserJSPlugin(), new OptimizeCSSAssetsPlugin()],
+  },
+
   module: {
     rules: [
       {
@@ -31,6 +37,7 @@ module.exports = {
             },
           },
           'css-loader',
+          'postcss-loader'
         ]
       },
       {
