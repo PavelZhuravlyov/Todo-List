@@ -1,0 +1,24 @@
+.edit-button {
+  background: transparent;
+  padding: 0;
+  border: none;
+  outline: none;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.edit-button:focus,
+.edit-button:active {
+  background: transparent;
+}
+
+.edit-button-icon {
+  width: 16px;
+  height: 16px;
+  transition: fill .3s;
+}
+
+.edit-button-icon:hover {
+  fill: #26b951;
+}

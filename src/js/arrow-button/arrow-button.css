@@ -1,0 +1,32 @@
+.arrow-button {
+  background: transparent;
+  padding: 0;
+  border: none;
+  outline: none;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.arrow-button-up {
+  transform: rotate(180deg);
+}
+
+.arrow-button-down {
+  transform: rotate(0);
+}
+
+.arrow-button:focus,
+.arrow-button:active {
+  background: transparent;
+}
+
+.arrow-button-icon {
+  width: 16px;
+  height: 16px;
+  transition: fill .3s;
+}
+
+.arrow-button-icon:hover {
+  fill: #26b951;
+}

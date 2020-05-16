@@ -1,0 +1,111 @@
+html {
+  min-height: 100%;
+}
+
+body {
+  background-color: #fff;
+  background: linear-gradient(315deg, #fff 0%, #d7e1ec 100%) no-repeat;
+  color: #5d4a4a;
+} 
+
+#root {
+  display: flex;
+  justify-content: center;
+  max-width: 800px;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 20px 20px 100px;
+}
+
+.input-container {
+  margin: 0 0 70px 0;
+}
+
+.input-field::-webkit-input-placeholder {
+  color: #5d4a4a;
+}
+
+.input-field:-ms-input-placeholder {
+  color: #5d4a4a;
+}
+
+.input-field::placeholder {
+  color: #5d4a4a;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #d4d0d0;
+}
+
+.task:last-child {
+  border: 0;
+}
+
+.task-info {
+  display: flex;
+  font-size: 18px;
+}
+
+.task-info.task-is-completed > .task-name-holder {
+  text-decoration: line-through;
+}
+
+.task-name-holder {
+  display: flex;
+}
+
+.task-index {
+  margin: 0 10px 0 0;
+}
+
+.task-tools {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin: 0 0 0 20px;
+}
+
+.task-list {
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 8px 30px rgba(214, 214, 227, .6);
+}
+
+.delete-task-button {
+  margin: 0 0 0 25px;
+}
+
+.button-task-complete {
+  margin: 0 20px 0 auto;
+  opacity: 0;
+  transition: all .3s;
+}
+
+.task:hover .button-task-complete {
+  opacity: 1;
+}
+
+.arrow-buttons {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin: 0 15px;
+}
+
+.arrow-task-up,
+.arrow-task-down {
+  position: absolute;
+  left: 0;
+}
+
+.arrow-task-up {
+  top: -4px;
+}
+
+.arrow-task-down {
+  top: 9px;
+}
