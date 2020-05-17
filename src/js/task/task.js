@@ -77,6 +77,7 @@ class Task {
     this.$completeButton.unBindClick();
     this.$priorityUpButton.unBindClick();
     this.$priorityDownButton.unBindClick();
+    this.$editForm.removeEventsHandlers();
   }
 
   editTaskInit() {

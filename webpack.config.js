@@ -4,14 +4,16 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: './js/index.js',
 
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js',
-    publicPath: '/'
+    publicPath: ''
   },
 
   devServer: {
@@ -20,6 +22,8 @@ module.exports = {
     hot: true,
     contentBase: path.join(__dirname, 'src')
   },
+
+  devtool: isDev ? 'eval-cheap-source-map' : '',
 
   optimization: {
     minimizer: [new TerserJSPlugin(), new OptimizeCSSAssetsPlugin()],
@@ -40,12 +44,6 @@ module.exports = {
           'postcss-loader'
         ]
       },
-      {
-        test: /\.svg/,
-        use: {
-          loader: 'file-loader',
-        }
-      }
     ]
   },
 
@@ -54,9 +52,9 @@ module.exports = {
       template: './index.html'
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].css',
+      filename: 'style.css',
     }),
   ],
 
-  mode: 'development'
+  mode: isDev ? 'development' : 'production'
 };

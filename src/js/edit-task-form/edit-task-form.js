@@ -35,12 +35,13 @@ class EditTaskForm {
 
     this.handleKeyDown = (event) => {
       if (event.keyCode === ESC_CODE) {
+        this.$form.removeEventListener('submit', editTaskHandler);
         return this.cancelEdit();
       }
     }
   }
 
-  initEvents() {
+  initEventClose() {
     document.addEventListener('keydown', this.handleKeyDown);
   }
 
@@ -53,6 +54,12 @@ class EditTaskForm {
       ...this.taskData,
     });
 
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  removeEventsHandlers() {
+    this.$cancelEditButton.unBindClick();
+    this.$submitEditButton.unBindClick();
     document.removeEventListener('keydown', this.handleKeyDown);
   }
 
@@ -78,6 +85,7 @@ class EditTaskForm {
 
     EventHandler.editTask(taskData);
     this.updateTaskInfo(taskData);
+    document.removeEventListener('keydown', this.handleKeyDown);
   }
 
   initForm() {
@@ -95,8 +103,8 @@ class EditTaskForm {
   }
 
   render() {
+    this.initEventClose();
     this.initForm();
-    this.initEvents();
     return this.$form;
   }
 }
