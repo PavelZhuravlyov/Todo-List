@@ -16,12 +16,12 @@ class EditTaskForm {
   initTools() {
     this.$cancelEditButton = new Button({
       innerHTML: 'Cancel',
-      className: 'btn-small red edit-task-form-button'
+      className: 'button button-cancel edit-task-form-button'
     });
 
     this.$submitEditButton = new Button({
       innerHTML: 'Edit task',
-      className: 'btn-small edit-task-form-button',
+      className: 'button edit-task-form-button',
       type: 'submit'
     });
   }
@@ -92,6 +92,7 @@ class EditTaskForm {
     const $input = document.createElement('input');
     $input.value = this.taskData.name;
     $input.name = 'name';
+    $input.className = 'input-field';
 
     this.$form.innerHTML = '';
 

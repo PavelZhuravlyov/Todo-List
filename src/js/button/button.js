@@ -1,7 +1,7 @@
 class Button {
   constructor(buttonData) {
     this.defaultProps = {
-      className: 'btn-small'
+      className: 'button'
     };
     this.data = buttonData;
     this.$button = document.createElement('button');

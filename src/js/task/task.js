@@ -41,7 +41,7 @@ class Task {
 
     this.$completeButton = new CompleteTaskButton({
       innerHTML: this.isCompleted ? 'Uncomplete' : 'Complete',
-      className: 'button-task-complete btn-small'
+      className: 'button button-task-complete'
     });
 
     this.$editForm = new EditTaskForm({
